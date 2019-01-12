@@ -1,10 +1,14 @@
 # liblit
 
-liblit is a library for parsing digital book formats.
+liblit is a library for parsing and creating digital book formats.
 
-Support is *planned* for the following formats:
+Filetype Support:
 
-* Epub
-* Mobi
-* cbz, cbr, cbt
+Format | Parsing | Writing
+-------|---------|--------
+Epub   | [X]     | [ ]
+Mobi   | [ ]     | [ ]
+Cbz    | [X]     | [ ]
+Cbt    | [ ]     | [ ]
+Cbr    | [ ]     | [ ]
 
