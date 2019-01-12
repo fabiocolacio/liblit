@@ -6,6 +6,8 @@ import(
     "errors"
     "encoding/xml"
     "io/ioutil"
+    "strings"
+    "fmt"
 )
 
 var(
@@ -13,12 +15,12 @@ var(
 )
 
 type Epub struct {
-    Metadata Metadata
-    tokens []html.Token
+    Metadata   Metadata
+    Tokens   []html.Token
 }
 
 type rootFile struct {
-    FullPath  string  `xml:"full-path,attr"`
+    FullPath  string `xml:"full-path,attr"`
     MediaType string `xml:"media-type,attr"`
 }
 
@@ -87,8 +89,7 @@ func NewFromFile(filename string) (*Epub, error) {
 
         targetMime := "application/epub+zip"
         if string(contents) != targetMime {
-            return nil, ErrInvalidEpub
-        }
+            return nil, ErrInvalidEpub }
 
         mimeReader.Close()
     }
@@ -123,6 +124,7 @@ func NewFromFile(filename string) (*Epub, error) {
     }
 
     // Parse oebps file
+    // var tocPath string
     if opfFile := zipFiles[opfPath]; opfFile == nil {
         return nil, ErrInvalidEpub
     } else {
@@ -144,7 +146,46 @@ func NewFromFile(filename string) (*Epub, error) {
         }
 
         epub.Metadata = opfContents.Metadata
+
+        opfBase := opfPath[:strings.LastIndex(opfPath, "/") + 1]
+        for _, item := range opfContents.Manifest.Items {
+            if item.MediaType == "application/xhtml+xml" {
+                if htmlFile := zipFiles[opfBase + item.Href]; htmlFile == nil {
+                    fmt.Println(opfBase + item.Href)
+                    return nil, ErrInvalidEpub
+                } else {
+                    htmlReader, err := htmlFile.Open()
+                    if err != nil {
+                        return nil, err
+                    }
+
+                    tokenizer := html.NewTokenizer(htmlReader)
+
+                    for {
+                        tokenType := tokenizer.Next()
+                        
+                        if tokenType == html.ErrorToken {
+                            break
+                        }
+
+                        epub.Tokens = append(epub.Tokens, tokenizer.Token())
+                    }
+
+                    htmlReader.Close()
+                }
+            }
+
+            if item.Id == "ncx" {
+                // tocPath = item.Href
+            }
+        }
     }
+
+    /*
+    // Parse toc file
+    if tocFile := zipFiles[tocPath]; tocFile != nil {
+    }
+    */
 
     return epub, nil
 }
