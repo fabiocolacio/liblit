@@ -12,3 +12,5 @@ Cbz    | [X]     | [ ]
 Cbt    | [ ]     | [ ]
 Cbr    | [ ]     | [ ]
 
+Example usage can be found in ``/examples``
+
