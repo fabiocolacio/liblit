@@ -2,15 +2,14 @@
 
 liblit is a library for parsing and creating digital book formats.
 
-Filetype Support:
+Example usage can be found in ``/examples``
+
+## Filetype Support:
 
 Format | Parsing | Writing
 -------|---------|--------
-Epub   | [X]     | [ ]
-Mobi   | [ ]     | [ ]
-Cbz    | [X]     | [ ]
-Cbt    | [ ]     | [ ]
-Cbr    | [ ]     | [ ]
-
-Example usage can be found in ``/examples``
-
+Epub   | yes     | no
+Mobi   | no      | no
+Cbz    | yes     | no
+Cbt    | no      | no
+Cbr    | no      | no
