@@ -124,7 +124,6 @@ func NewFromFile(filename string) (*Epub, error) {
     }
 
     // Parse oebps file
-    // var tocPath string
     if opfFile := zipFiles[opfPath]; opfFile == nil {
         return nil, ErrInvalidEpub
     } else {
@@ -174,18 +173,8 @@ func NewFromFile(filename string) (*Epub, error) {
                     htmlReader.Close()
                 }
             }
-
-            if item.Id == "ncx" {
-                // tocPath = item.Href
-            }
         }
     }
-
-    /*
-    // Parse toc file
-    if tocFile := zipFiles[tocPath]; tocFile != nil {
-    }
-    */
 
     return epub, nil
 }
